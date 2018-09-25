@@ -20,6 +20,11 @@ contract TokenFarm {
 		owner = msg.sender;
 	}
 
+	modifier onlyOwner() {
+		require(msg.sender == owner, "caller must be the owner");
+		_;
+	}
+
 	/* Stakes Tokens (Deposit): An investor will deposit the DAI into the smart contracts
 	to starting earning rewards.
 		
@@ -61,12 +66,9 @@ contract TokenFarm {
 
 	/* Issuing Tokens: Earning interest which is issuing tokens for people who stake them.
 
-	Core Thing: Distribute DApp tokens as interes and also allow the investor to unstake their tokens
+	Core Thing: Distribute DApp tokens as interest and also allow the investor to unstake their tokens
 	from the app so give them interest using the app. */
-	function issueTokens() public {
-		// only owner can call this function
-		require(msg.sender == owner, "caller must be the owner");
-
+	function issueTokens() public onlyOwner {
 		// issue tokens to all stakers
 		for (uint i=0; i<stakers.length; i++) {
 			address recipient = stakers[i];
@@ -76,5 +78,4 @@ contract TokenFarm {
 			}			
 		}
 	}
-
 }
